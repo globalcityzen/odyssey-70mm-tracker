@@ -1,0 +1,32 @@
+{
+  "venues": [
+    {"id": "amc-metreon", "chain": "amc", "name": "AMC Metreon 16", "city": "San Francisco", "state": "CA", "region": "West", "tz": "America/Los_Angeles", "market": "san-francisco", "slug": "amc-metreon-16"},
+    {"id": "amc-lincoln-square", "chain": "amc", "name": "AMC Lincoln Square 13", "city": "New York", "state": "NY", "region": "East", "tz": "America/New_York", "market": "new-york-city", "slug": "amc-lincoln-square-13"},
+    {"id": "amc-citywalk", "chain": "amc", "name": "Universal Cinema AMC at CityWalk", "city": "Universal City", "state": "CA", "region": "West", "tz": "America/Los_Angeles", "market": "los-angeles", "slug": "amc-universal-citywalk-19-with-imax-los-angeles"},
+    {"id": "amc-rivercenter", "chain": "amc", "name": "AMC Rivercenter 11", "city": "San Antonio", "state": "TX", "region": "Central", "tz": "America/Chicago", "market": "san-antonio", "slug": "amc-rivercenter-11-with-alamo-imax"},
+
+    {"id": "regal-hacienda", "chain": "regal", "name": "Regal Hacienda Crossings", "city": "Dublin", "state": "CA", "region": "West", "tz": "America/Los_Angeles", "code": "0347", "path": "regal-hacienda-crossings-0347"},
+    {"id": "regal-irvine", "chain": "regal", "name": "Regal Irvine Spectrum", "city": "Irvine", "state": "CA", "region": "West", "tz": "America/Los_Angeles", "code": "1010", "path": "regal-edwards-irvine-spectrum-1010"},
+    {"id": "regal-la-live", "chain": "regal", "name": "Regal LA Live", "city": "Los Angeles", "state": "CA", "region": "West", "tz": "America/Los_Angeles", "code": "1484", "path": "regal-la-live-1484"},
+    {"id": "regal-ontario", "chain": "regal", "name": "Regal Edwards Ontario Palace", "city": "Ontario", "state": "CA", "region": "West", "tz": "America/Los_Angeles", "code": "1026", "path": "regal-edwards-ontario-palace-1026"},
+    {"id": "regal-colorado-center", "chain": "regal", "name": "Regal UA Colorado Center", "city": "Denver", "state": "CO", "region": "Central", "tz": "America/Denver", "code": "1308", "path": "regal-ua-colorado-center-1308", "imaxAttrIs70mm": true},
+    {"id": "regal-mall-of-georgia", "chain": "regal", "name": "Regal Mall of Georgia", "city": "Buford", "state": "GA", "region": "East", "tz": "America/New_York", "code": "0701", "path": "regal-mall-of-georgia-0701"},
+    {"id": "regal-king-of-prussia", "chain": "regal", "name": "Regal UA King of Prussia", "city": "King of Prussia", "state": "PA", "region": "East", "tz": "America/New_York", "code": "1329", "path": "regal-ua-king-of-prussia-1329"},
+    {"id": "regal-opry-mills", "chain": "regal", "name": "Regal Opry Mills", "city": "Nashville", "state": "TN", "region": "Central", "tz": "America/Chicago", "code": "0615", "path": "regal-opry-mills-0615"},
+
+    {"id": "cnk-dallas", "chain": "cinemark", "name": "Cinemark Dallas XD and IMAX", "city": "Dallas", "state": "TX", "region": "Central", "tz": "America/Chicago", "path": "tx-dallas/cinemark-dallas-xd-and-imax", "theaterId": "207"},
+    {"id": "cnk-carefree", "chain": "cinemark", "name": "Cinemark Carefree Circle and IMAX", "city": "Colorado Springs", "state": "CO", "region": "Central", "tz": "America/Denver", "path": "co-colorado-springs/cinemark-carefree-circle-xd-and-imax", "theaterId": "301"},
+    {"id": "cnk-seven-bridges", "chain": "cinemark", "name": "Cinemark Seven Bridges and IMAX", "city": "Woodridge", "state": "IL", "region": "Central", "tz": "America/Chicago", "path": "il-woodridge/cinemark-seven-bridges-and-imax", "theaterId": "276"},
+    {"id": "cnk-tinseltown-rochester", "chain": "cinemark", "name": "Cinemark Tinseltown Rochester and IMAX", "city": "Rochester", "state": "NY", "region": "East", "tz": "America/New_York", "path": "ny-rochester/cinemark-tinseltown-usa-and-imax", "theaterId": "202"},
+
+    {"id": "ind-harkins-az-mills", "chain": "independent", "name": "Harkins Arizona Mills 18 & IMAX", "city": "Tempe", "state": "AZ", "region": "West", "tz": "America/Phoenix", "url": "https://www.harkins.com"},
+    {"id": "ind-tcl-chinese", "chain": "independent", "name": "TCL Chinese Theatre IMAX", "city": "Hollywood", "state": "CA", "region": "West", "tz": "America/Los_Angeles", "url": "https://www.tclchinesetheatres.com"},
+    {"id": "ind-esquire", "chain": "independent", "name": "Esquire IMAX Theatre", "city": "Sacramento", "state": "CA", "region": "West", "tz": "America/Los_Angeles", "url": "https://www.esquireimax.com"},
+    {"id": "ind-autonation", "chain": "independent", "name": "AutoNation IMAX (Museum of Discovery & Science)", "city": "Fort Lauderdale", "state": "FL", "region": "East", "tz": "America/New_York", "url": "https://mods.org/imax"},
+    {"id": "ind-indiana-state", "chain": "independent", "name": "IMAX at Indiana State Museum", "city": "Indianapolis", "state": "IN", "region": "Central", "tz": "America/Indiana/Indianapolis", "url": "https://www.indianamuseum.org/imax"},
+    {"id": "ind-celebration-gr", "chain": "independent", "name": "Celebration Cinema Grand Rapids North & IMAX", "city": "Grand Rapids", "state": "MI", "region": "Central", "tz": "America/Detroit", "url": "https://celebrationcinema.com"},
+    {"id": "ind-brenden-palms", "chain": "independent", "name": "Brenden Theatres at the Palms & IMAX", "city": "Las Vegas", "state": "NV", "region": "West", "tz": "America/Los_Angeles", "url": "https://www.brendentheatres.com"},
+    {"id": "ind-apple-providence", "chain": "independent", "name": "Apple Cinemas Providence Place & IMAX", "city": "Providence", "state": "RI", "region": "East", "tz": "America/New_York", "url": "https://applecinemas.com"},
+    {"id": "ind-tn-aquarium", "chain": "independent", "name": "IMAX at Tennessee Aquarium", "city": "Chattanooga", "state": "TN", "region": "East", "tz": "America/New_York", "url": "https://www.tnaqua.org/imax"}
+  ]
+}

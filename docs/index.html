@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Odyssey — IMAX 70mm Ticket Tracker</title>
+<meta name="description" content="Live seat availability for every US theater showing Christopher Nolan's The Odyssey in IMAX 70mm. Updated every 15 minutes.">
+<style>
+:root {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #898781;
+  --hairline: #2c2c2a;
+  --ring: rgba(255,255,255,0.10);
+  --good: #0ca30c;
+  --warning: #fab219;
+  --critical: #d03b3b;
+  --accent: #3987e5;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #898781;
+  --hairline: #e1e0d9;
+  --ring: rgba(11,11,11,0.10);
+  --good: #006300;
+  --warning: #8a5b00;
+  --critical: #d03b3b;
+  --accent: #2a78d6;
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  background: var(--page); color: var(--ink);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding: 0 16px 64px;
+}
+.wrap { max-width: 1080px; margin: 0 auto; }
+header { padding: 40px 0 8px; }
+h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); letter-spacing: -0.01em; }
+h1 .thin { color: var(--muted); font-weight: 400; }
+.sub { color: var(--ink-2); margin-top: 6px; max-width: 60ch; }
+.statsrow { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 8px; }
+.stat {
+  background: var(--surface); border: 1px solid var(--ring); border-radius: 10px;
+  padding: 10px 16px; min-width: 118px;
+}
+.stat b { display: block; font-size: 1.45rem; }
+.stat span { color: var(--muted); font-size: 0.8rem; }
+.updated { color: var(--muted); font-size: 0.85rem; margin: 8px 0 24px; }
+.updated .stale { color: var(--warning); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 28px; color: var(--ink-2); font-size: 0.85rem; }
+.legend .chip { pointer-events: none; }
+h2.region { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 30px 0 12px; border-bottom: 1px solid var(--hairline); padding-bottom: 6px; }
+.venues { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr)); gap: 14px; }
+.card {
+  background: var(--surface); border: 1px solid var(--ring); border-radius: 12px;
+  padding: 16px 16px 12px;
+}
+.card h3 { font-size: 1.02rem; }
+.card .loc { color: var(--muted); font-size: 0.85rem; margin-bottom: 10px; }
+.card .loc a { color: var(--accent); text-decoration: none; }
+.card .loc a:hover { text-decoration: underline; }
+.day { margin: 8px 0 2px; }
+.day .d { color: var(--ink-2); font-size: 0.8rem; margin-bottom: 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: 999px; padding: 4px 11px; font-size: 0.85rem;
+  border: 1px solid var(--hairline); color: var(--ink);
+  text-decoration: none; white-space: nowrap;
+}
+.chip .ico { font-size: 0.7rem; line-height: 1; }
+.chip.avail { border-color: var(--good); }
+.chip.avail .ico { color: var(--good); }
+a.chip.avail:hover { background: color-mix(in oklab, var(--good) 14%, transparent); }
+.chip.almost { border-color: var(--warning); }
+.chip.almost .ico { color: var(--warning); }
+a.chip.almost:hover { background: color-mix(in oklab, var(--warning) 14%, transparent); }
+.chip.sold { border-color: var(--hairline); color: var(--muted); }
+.chip.sold .t { text-decoration: line-through; }
+.chip.sold .ico { color: var(--critical); }
+.none { color: var(--muted); font-size: 0.9rem; padding: 6px 0; }
+.err { color: var(--warning); font-size: 0.85rem; }
+.ind .card { opacity: 0.85; }
+footer { margin-top: 48px; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--hairline); padding-top: 16px; }
+footer a { color: var(--accent); }
+.toggle {
+  float: right; margin-top: 6px; background: none; border: 1px solid var(--hairline);
+  color: var(--ink-2); border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 0.8rem;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <button class="toggle" id="themeToggle" aria-label="Toggle color theme">◐ theme</button>
+    <h1>The Odyssey <span class="thin">/ IMAX 70mm tracker</span></h1>
+    <p class="sub">Live seat availability for every US theater projecting Christopher Nolan's
+    <em>The Odyssey</em> on 15/70mm film. Sold-out shows get returns — this page updates
+    every 15 minutes so you can catch them.</p>
+  </header>
+
+  <div class="statsrow" id="stats" hidden></div>
+  <p class="updated" id="updated">Loading…</p>
+
+  <div class="legend" aria-hidden="true">
+    <span class="chip avail"><span class="ico">●</span><span class="t">7:00pm</span></span> available
+    <span class="chip almost"><span class="ico">◐</span><span class="t">7:00pm</span></span> almost full
+    <span class="chip sold"><span class="ico">✕</span><span class="t">7:00pm</span></span> sold out
+  </div>
+
+  <main id="main"></main>
+
+  <footer>
+    Not affiliated with any theater chain or Universal Pictures. Availability data is read
+    from public showtime pages and may lag reality by a few minutes — always confirm at the
+    box office link. Built with <a href="https://claude.com/claude-code">Claude Code</a>.
+  </footer>
+</div>
+
+<script>
+const REGIONS = ["West", "Central", "East"];
+
+const root = document.documentElement;
+const saved = localStorage.getItem("theme");
+if (saved) root.dataset.theme = saved;
+else if (matchMedia("(prefers-color-scheme: light)").matches) root.dataset.theme = "light";
+document.getElementById("themeToggle").onclick = () => {
+  const next = root.dataset.theme === "light" ? "dark" : "light";
+  root.dataset.theme = next; localStorage.setItem("theme", next);
+};
+
+// "now" expressed as a sortable local string in a given IANA zone
+function nowIn(tz) {
+  const p = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric",
+    month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false })
+    .formatToParts(new Date()).reduce((o, x) => (o[x.type] = x.value, o), {});
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+}
+
+// venue-local sortable string for a show ({utc} or {local})
+function localKey(show, tz) {
+  if (show.local) return show.local.slice(0, 16);
+  const p = new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric",
+    month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false })
+    .formatToParts(new Date(show.utc)).reduce((o, x) => (o[x.type] = x.value, o), {});
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+}
+
+function fmtTime(key) {
+  let [h, m] = key.slice(11, 16).split(":").map(Number);
+  const ap = h >= 12 ? "pm" : "am";
+  h = h % 12 || 12;
+  return `${h}:${String(m).padStart(2, "0")}${ap}`;
+}
+
+function fmtDay(key) {
+  const [y, mo, d] = key.slice(0, 10).split("-").map(Number);
+  return new Date(y, mo - 1, d).toLocaleDateString(undefined,
+    { weekday: "short", month: "short", day: "numeric" });
+}
+
+function chip(show, key) {
+  const cls = show.status === "SOLD_OUT" ? "sold" : show.status === "ALMOST_FULL" ? "almost" : "avail";
+  const ico = cls === "sold" ? "✕" : cls === "almost" ? "◐" : "●";
+  const label = cls === "sold" ? "sold out" : cls === "almost" ? "almost full" : "available";
+  const inner = `<span class="ico" aria-hidden="true">${ico}</span><span class="t">${fmtTime(key)}</span>`;
+  const aria = `aria-label="${fmtDay(key)} ${fmtTime(key)} — ${label}"`;
+  return cls === "sold"
+    ? `<span class="chip sold" ${aria}>${inner}</span>`
+    : `<a class="chip ${cls}" href="${show.url}" target="_blank" rel="noopener" ${aria}>${inner}</a>`;
+}
+
+function venueCard(v) {
+  let body;
+  if (v.shows === null) {
+    body = `<p class="none">Independent venue — not tracked yet. Check the
+      <a href="${v.buyUrl}" target="_blank" rel="noopener">box office</a>.</p>`;
+  } else if (v.error) {
+    body = `<p class="err">⚠ Couldn't reach this venue's showtimes on the last check — will retry.</p>`;
+  } else {
+    const cutoff = nowIn(v.tz);
+    const upcoming = v.shows.map(s => [localKey(s, v.tz), s])
+      .filter(([k]) => k >= cutoff).sort((a, b) => a[0] < b[0] ? -1 : 1);
+    if (!upcoming.length) {
+      body = `<p class="none">No upcoming 70mm showtimes listed.</p>`;
+    } else {
+      const days = {};
+      for (const [k, s] of upcoming) (days[k.slice(0, 10)] ??= []).push([k, s]);
+      body = Object.entries(days).map(([day, rows]) => `
+        <div class="day"><div class="d">${fmtDay(day + "T00")}</div>
+          <div class="chips">${rows.map(([k, s]) => chip(s, k)).join("")}</div>
+        </div>`).join("");
+    }
+  }
+  const buy = v.buyUrl ? ` · <a href="${v.buyUrl}" target="_blank" rel="noopener">box office ↗</a>` : "";
+  return `<div class="card"><h3>${v.name}</h3>
+    <div class="loc">${v.city}, ${v.state}${buy}</div>${body}</div>`;
+}
+
+async function render() {
+  const res = await fetch("data.json", { cache: "no-store" });
+  const data = await res.json();
+
+  const gen = new Date(data.generatedAt);
+  const mins = Math.round((Date.now() - gen) / 60000);
+  const staleCls = mins > 45 ? ' class="stale"' : "";
+  document.getElementById("updated").innerHTML =
+    `Last checked <span${staleCls}>${mins <= 1 ? "just now" : mins + " min ago"}</span>
+     (${gen.toLocaleString()}) · next ~15 min`;
+
+  const s = data.stats;
+  const el = document.getElementById("stats");
+  el.hidden = false;
+  el.innerHTML = `
+    <div class="stat"><b>${s.trackedVenues}</b><span>venues tracked live</span></div>
+    <div class="stat"><b>${s.totalShows}</b><span>70mm showtimes</span></div>
+    <div class="stat"><b>${s.soldOut}</b><span>sold out</span></div>
+    <div class="stat"><b>${s.totalShows - s.soldOut}</b><span>still bookable</span></div>`;
+
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+  for (const region of REGIONS) {
+    const tracked = data.venues.filter(v => v.region === region && v.shows !== null);
+    const ind = data.venues.filter(v => v.region === region && v.shows === null);
+    if (!tracked.length && !ind.length) continue;
+    main.insertAdjacentHTML("beforeend", `<h2 class="region">${region}</h2>
+      <div class="venues">${tracked.map(venueCard).join("")}</div>
+      ${ind.length ? `<div class="venues ind" style="margin-top:10px">${ind.map(venueCard).join("")}</div>` : ""}`);
+  }
+}
+render().catch(e => {
+  document.getElementById("updated").textContent = "Couldn't load availability data — refresh to retry.";
+});
+setInterval(() => render().catch(() => {}), 5 * 60 * 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+name: Poll 70mm availability
+
+on:
+  schedule:
+    # GitHub delays popular minutes; off-peak minutes fire more reliably
+    - cron: "7,22,37,52 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: poll
+  cancel-in-progress: false
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Poll all venues
+        run: python poller.py --days 10
+
+      - name: Commit snapshot
+        run: |
+          git config user.name "odyssey-poller[bot]"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/data.json
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "data: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull --rebase origin main
+            git push
+          fi
